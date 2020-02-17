@@ -10,8 +10,16 @@ type Request struct {
 // ParserResult 解析结果
 // 包含新的Request 和 解析结果
 type ParserResult struct {
-	Items    []interface{}
+	Items    []Item
 	Requests []*Request
+}
+
+// Item item
+type Item struct {
+	ID      string      `json:"id"`
+	URL     string      `json:"url"`
+	Type    string      `json:"type"`
+	Payload interface{} `json:"payload"`
 }
 
 // ParserFunc 解析器类型

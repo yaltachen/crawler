@@ -2,7 +2,6 @@ package zhenai
 
 import (
 	"crawler/crawler/engine"
-	"crawler/crawler/model"
 	"regexp"
 	"strings"
 )
@@ -26,11 +25,11 @@ func CityParser(loc string, content []byte) (parserResult *engine.ParserResult, 
 		nextPageMatch    [][]string
 		relateCitysMatch [][]string
 		requests         []*engine.Request
-		items            []interface{}
+		// items            []interface{}
 	)
 
 	requests = make([]*engine.Request, 0)
-	items = make([]interface{}, 0)
+	// items = make([]interface{}, 0)
 
 	// 城市解析
 	citysMatch = personReg.FindAllStringSubmatch(string(content), -1)
@@ -45,12 +44,12 @@ func CityParser(loc string, content []byte) (parserResult *engine.ParserResult, 
 				return PersonParser(url, id, name, gender, loc, content)
 			},
 		})
-		items = append(items, &model.CityItem{
-			ID:     id,
-			URL:    url,
-			Name:   name,
-			Gender: gender,
-		})
+		// items = append(items, &model.CityItem{
+		// 	ID:     id,
+		// 	URL:    url,
+		// 	Name:   name,
+		// 	Gender: gender,
+		// })
 	}
 
 	// 下一页
@@ -79,7 +78,7 @@ func CityParser(loc string, content []byte) (parserResult *engine.ParserResult, 
 	}
 
 	parserResult = &engine.ParserResult{
-		Items:    items,
+		Items:    make([]engine.Item, 0),
 		Requests: requests,
 	}
 

@@ -32,7 +32,7 @@ var (
 // PersonParser 用户资料解析器
 func PersonParser(url string, id string, name, gender, loc string, content []byte) (parserResult *engine.ParserResult, err error) {
 	var (
-		profile   model.Profile
+		profile   engine.Item
 		age       string
 		weight    string
 		height    string
@@ -54,7 +54,7 @@ func PersonParser(url string, id string, name, gender, loc string, content []byt
 	marriage = getArgs(marriageParser.FindStringSubmatch(string(content)))
 	education = getArgs(educationParser.FindStringSubmatch(string(content)))
 	xingzuo = getArgs(xingzuoParser.FindStringSubmatch(string(content)))
-	profile = model.Profile{
+	profile = engine.Item{
 		URL:  url,
 		ID:   id,
 		Type: "zhenai",

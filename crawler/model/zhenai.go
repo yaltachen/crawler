@@ -1,5 +1,7 @@
 package model
 
+import "encoding/json"
+
 // CityListItem 城市列表解析结果
 type CityListItem struct {
 	Loc string
@@ -31,10 +33,13 @@ type ZhenaiPayLoad struct {
 	Car       string `json:"car"`
 }
 
-// Profile 存储到es的内容
-type Profile struct {
-	ID      string      `json:"id"`
-	URL     string      `json:"url"`
-	Type    string      `json:"type"`
-	Payload interface{} `json:"payload"`
+// FromJSONObj json to obj
+func FromJSONObj(o interface{}) (ZhenaiPayLoad, error) {
+	var profile ZhenaiPayLoad
+	s, err := json.Marshal(o)
+	if err != nil {
+		return profile, err
+	}
+	err = json.Unmarshal(s, &profile)
+	return profile, err
 }

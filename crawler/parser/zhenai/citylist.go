@@ -2,7 +2,6 @@ package zhenai
 
 import (
 	"crawler/crawler/engine"
-	"crawler/crawler/model"
 	"regexp"
 	"strings"
 )
@@ -20,14 +19,12 @@ func CityListParser(content []byte) (parserResult *engine.ParserResult, err erro
 	var (
 		citysMatch [][]string
 		requests   []*engine.Request
-		items      []interface{}
+		// items      []interface{}
 	)
 
 	citysMatch = cityReg.FindAllStringSubmatch(string(content), -1)
 	requests = make([]*engine.Request, 0)
-	items = make([]interface{}, 0)
-
-	count := 0
+	// items = make([]interface{}, 0)
 
 	for _, city := range citysMatch {
 		if strings.Contains(city[2], "征婚") {
@@ -37,10 +34,7 @@ func CityListParser(content []byte) (parserResult *engine.ParserResult, err erro
 		if cityList[city[1]] == true {
 			continue
 		}
-		count++
-		if count >= 5 {
-			break
-		}
+
 		loc := city[2]
 		requests = append(requests, &engine.Request{
 			URL: city[1],
@@ -51,10 +45,10 @@ func CityListParser(content []byte) (parserResult *engine.ParserResult, err erro
 
 		cityList[city[1]] = true
 
-		items = append(items, &model.CityListItem{URL: city[1], Loc: city[2]})
+		// items = append(items, &model.CityListItem{URL: city[1], Loc: city[2]})
 	}
 	parserResult = &engine.ParserResult{
-		Items:    items,
+		Items:    make([]engine.Item, 0),
 		Requests: requests,
 	}
 	return parserResult, err

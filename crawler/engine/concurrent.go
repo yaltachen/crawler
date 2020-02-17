@@ -1,21 +1,19 @@
 package engine
 
 import (
-	"crawler/crawler/model"
-	"log"
+	"crawler/crawler/duplicate"
 )
 
 // ConcurrentEngine 并发版
 type ConcurrentEngine struct {
 	WorkerCount int
 	Scheduler   Scheduler
+	ItemChan    chan Item
 }
 
 // Run 启动engine
 func (e ConcurrentEngine) Run(seeds ...*Request) {
-	var (
-		count = 0
-	)
+
 	out := make(chan *ParserResult)
 
 	// run scheduler
@@ -32,17 +30,20 @@ func (e ConcurrentEngine) Run(seeds ...*Request) {
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			_, ok := item.(model.Profile)
-			if !ok {
-				continue
-			}
-			count++
-			log.Printf("got item%d: %v", count, item)
+			// TODO: save to elasticsearch
+			go func(item Item) {
+				e.ItemChan <- item
+			}(item)
 		}
 
 		// 循环等待是因为要等所有request全部submit后，
 		// 外面的for循环才会继续，此时才能从out获得result
 		for _, req := range result.Requests {
+			if duplicate.IsDuplicate(req.URL) {
+				// 重复的url
+				// log.Printf("dulicate url: %s\r\n", req.URL)
+				continue
+			}
 			e.Scheduler.Submit(req)
 		}
 	}

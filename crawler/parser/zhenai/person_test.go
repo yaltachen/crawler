@@ -1,6 +1,7 @@
 package zhenai
 
 import (
+	"crawler/crawler/engine"
 	"crawler/crawler/fetcher"
 	"crawler/crawler/model"
 	"testing"
@@ -16,7 +17,7 @@ func TestPersonParser(t *testing.T) {
 		content []byte
 	)
 
-	item := model.Profile{
+	item := engine.Item{
 		ID:   "1513404786",
 		URL:  "https://album.zhenai.com/u/1513404786",
 		Type: "zhenai", Payload: model.ZhenaiPayLoad{
