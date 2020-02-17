@@ -19,7 +19,27 @@ var nextPage = regexp.MustCompile(
 	`(http://www.zhenai.com/zhenghun/[^/]*/[0-9^"]*)">下一页`)
 
 // CityParser 城市解析器
-func CityParser(loc string, content []byte) (parserResult *engine.ParserResult, err error) {
+type CityParser struct {
+	loc string
+}
+
+// Parse 解析
+func (p CityParser) Parse(content []byte) (result *engine.ParserResult, err error) {
+	return cityParser(p.loc, content)
+}
+
+// Serialize 序列化
+func (p CityParser) Serialize() (funcName string, args interface{}) {
+	return "CityParser", p.loc
+}
+
+// NewCityParser 返回CityParser
+func NewCityParser(loc string) *CityParser {
+	return &CityParser{loc: loc}
+}
+
+// cityParser 城市解析器
+func cityParser(loc string, content []byte) (parserResult *engine.ParserResult, err error) {
 	var (
 		citysMatch       [][]string
 		nextPageMatch    [][]string
@@ -40,9 +60,10 @@ func CityParser(loc string, content []byte) (parserResult *engine.ParserResult, 
 		id := url[strings.LastIndex(url, "/")+1:]
 		requests = append(requests, &engine.Request{
 			URL: url,
-			Parser: func(content []byte) (*engine.ParserResult, error) {
-				return PersonParser(url, id, name, gender, loc, content)
-			},
+			// Parser: func(content []byte) (*engine.ParserResult, error) {
+			// 	return PersonParser(url, id, name, gender, loc, content)
+			// },
+			Parser: NewPersonParser(url, id, name, gender, loc),
 		})
 		// items = append(items, &model.CityItem{
 		// 	ID:     id,
@@ -58,9 +79,10 @@ func CityParser(loc string, content []byte) (parserResult *engine.ParserResult, 
 		url := city[1]
 		requests = append(requests, &engine.Request{
 			URL: url,
-			Parser: func(content []byte) (*engine.ParserResult, error) {
-				return CityParser(loc, content)
-			},
+			// Parser: func(content []byte) (*engine.ParserResult, error) {
+			// 	return CityParser(loc, content)
+			// },
+			Parser: NewCityParser(loc),
 		})
 	}
 
@@ -71,9 +93,10 @@ func CityParser(loc string, content []byte) (parserResult *engine.ParserResult, 
 		loc := city[2]
 		requests = append(requests, &engine.Request{
 			URL: url,
-			Parser: func(content []byte) (*engine.ParserResult, error) {
-				return CityParser(loc, content)
-			},
+			// Parser: func(content []byte) (*engine.ParserResult, error) {
+			// 	return CityParser(loc, content)
+			// },
+			Parser: NewCityParser(loc),
 		})
 	}
 

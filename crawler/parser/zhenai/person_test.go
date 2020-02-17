@@ -36,7 +36,7 @@ func TestPersonParser(t *testing.T) {
 			Car:       "未买车"}}
 
 	content, _ = fetcher.Fetch(url)
-	result, err := PersonParser(url, id, name, gender, loc, content)
+	result, err := personParser(url, id, name, gender, loc, content)
 	if err != nil {
 		t.Errorf("parse person failed, err: %v", err)
 	}

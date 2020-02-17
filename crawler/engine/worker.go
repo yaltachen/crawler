@@ -21,7 +21,7 @@ func doWork(req *Request) (result *ParserResult, err error) {
 		return nil, err
 	}
 
-	if result, err = req.Parser(content); err != nil {
+	if result, err = req.Parser.Parse(content); err != nil {
 		log.Printf("parser %s failed, err: %v\r\n", req.URL, err)
 		return nil, err
 	}

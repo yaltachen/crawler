@@ -29,8 +29,32 @@ var (
 		`<div[^>]*>籍贯:([^<]*)</div>`)
 )
 
-// PersonParser 用户资料解析器
-func PersonParser(url string, id string, name, gender, loc string, content []byte) (parserResult *engine.ParserResult, err error) {
+// PersonParser 用户解析器
+type PersonParser struct {
+	URL    string
+	ID     string
+	Name   string
+	Gender string
+	Loc    string
+}
+
+// Parse 解析
+func (p PersonParser) Parse(content []byte) (result *engine.ParserResult, err error) {
+	return personParser(p.URL, p.ID, p.Name, p.Gender, p.Loc, content)
+}
+
+// Serialize 序列化
+func (p PersonParser) Serialize() (funcName string, args interface{}) {
+	return "PersonParser", p
+}
+
+// NewPersonParser 返回PersonParser
+func NewPersonParser(url, id, name, gender, loc string) *PersonParser {
+	return &PersonParser{url, id, name, gender, loc}
+}
+
+// personParser 用户资料解析器
+func personParser(url string, id string, name, gender, loc string, content []byte) (parserResult *engine.ParserResult, err error) {
 	var (
 		profile   engine.Item
 		age       string

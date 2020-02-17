@@ -15,7 +15,26 @@ var cityReg = regexp.MustCompile(
 var cityList = make(map[string]bool)
 
 // CityListParser 城市列表解析器
-func CityListParser(content []byte) (parserResult *engine.ParserResult, err error) {
+type CityListParser struct {
+}
+
+// NewCityListParser 返回城市列表解析器
+func NewCityListParser() *CityListParser {
+	return &CityListParser{}
+}
+
+// Parse 解析
+func (p CityListParser) Parse(content []byte) (result *engine.ParserResult, err error) {
+	return cityListParser(content)
+}
+
+// Serialize 序列化
+func (p CityListParser) Serialize() (funcName string, args interface{}) {
+	return "CityListParser", nil
+}
+
+// cityListParser 城市列表解析器
+func cityListParser(content []byte) (parserResult *engine.ParserResult, err error) {
 	var (
 		citysMatch [][]string
 		requests   []*engine.Request
@@ -38,9 +57,10 @@ func CityListParser(content []byte) (parserResult *engine.ParserResult, err erro
 		loc := city[2]
 		requests = append(requests, &engine.Request{
 			URL: city[1],
-			Parser: func(content []byte) (*engine.ParserResult, error) {
-				return CityParser(loc, content)
-			},
+			// Parser: func(content []byte) (*engine.ParserResult, error) {
+			// 	return CityParser(loc, content)
+			// },
+			Parser: NewCityParser(loc),
 		})
 
 		cityList[city[1]] = true

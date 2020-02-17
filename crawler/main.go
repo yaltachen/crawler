@@ -14,8 +14,9 @@ func main() {
 	)
 
 	seeds = append(seeds, &engine.Request{
-		URL:    "http://www.zhenai.com/zhenghun/",
-		Parser: zhenai.CityListParser,
+		URL: "http://www.zhenai.com/zhenghun/",
+		// Parser: zhenai.CityListParser,
+		Parser: zhenai.NewCityListParser(),
 	})
 
 	// engine.SimpleEngine{}.Run(seeds...)

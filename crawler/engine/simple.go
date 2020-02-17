@@ -30,7 +30,7 @@ func (SimpleEngine) Run(seeds ...*Request) {
 			log.Printf("Fetcher: error fetching %s: %v\r\n", r.URL, err)
 		}
 
-		if result, err = r.Parser(content); err != nil {
+		if result, err = r.Parser.Parse(content); err != nil {
 			log.Printf("Parser: error parsing %s: %v\r\n", r.URL, err)
 		}
 
