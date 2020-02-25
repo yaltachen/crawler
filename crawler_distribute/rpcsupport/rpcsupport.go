@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 // ServeRPC 开启一个rpc service
@@ -27,6 +28,19 @@ func ServeRPC(host string, service interface{}) error {
 			log.Printf("accept failed, err: %v\r\n", err)
 			continue
 		}
-		go rpc.ServeConn(conn)
+		log.Printf("accept conn")
+		go jsonrpc.ServeConn(conn)
 	}
+}
+
+// NewSupport 返回一个jsonrpc客户端
+func NewSupport(host string) (*rpc.Client, error) {
+	var (
+		conn net.Conn
+		err  error
+	)
+	if conn, err = net.Dial("tcp", host); err != nil {
+		return nil, err
+	}
+	return jsonrpc.NewClient(conn), nil
 }

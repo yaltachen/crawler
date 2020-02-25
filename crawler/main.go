@@ -30,7 +30,8 @@ func main() {
 	engine.ConcurrentEngine{
 		WorkerCount: 10,
 		// Scheduler:   &scheduler.SimpleScheduler{},
-		Scheduler: &scheduler.QueueScheduler{},
-		ItemChan:  itemChan,
+		Scheduler:        &scheduler.QueueScheduler{},
+		ItemChan:         itemChan,
+		RequestProcessor: engine.DoWork,
 	}.Run(seeds...)
 }

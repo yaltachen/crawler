@@ -23,7 +23,7 @@ func Fetch(url string) ([]byte, error) {
 		content []byte
 		err     error
 	)
-	// log.Printf("fetching %s\r\n", url)
+	log.Printf("fetching %s\r\n", url)
 	client = &http.Client{}
 	if req, err = http.NewRequest(http.MethodGet, url, nil); err != nil {
 		log.Printf("new request failed, url: %s, err: %v\r\n", url, err)

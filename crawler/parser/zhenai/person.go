@@ -31,11 +31,11 @@ var (
 
 // PersonParser 用户解析器
 type PersonParser struct {
-	URL    string
-	ID     string
-	Name   string
-	Gender string
-	Loc    string
+	URL    string `json:"url"`
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Gender string `json:"gender"`
+	Loc    string `json:"loc"`
 }
 
 // Parse 解析

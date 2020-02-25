@@ -6,10 +6,14 @@ import (
 
 // ConcurrentEngine 并发版
 type ConcurrentEngine struct {
-	WorkerCount int
-	Scheduler   Scheduler
-	ItemChan    chan Item
+	WorkerCount      int
+	Scheduler        Scheduler
+	ItemChan         chan Item
+	RequestProcessor Processor
 }
+
+// Processor 处理任务
+type Processor func(*Request) (*ParserResult, error)
 
 // Run 启动engine
 func (e ConcurrentEngine) Run(seeds ...*Request) {
@@ -21,7 +25,8 @@ func (e ConcurrentEngine) Run(seeds ...*Request) {
 
 	// create worker
 	for i := 0; i < e.WorkerCount; i++ {
-		createWorker(e.Scheduler.WorkChan(), out, e.Scheduler)
+		// createWorker(e.Scheduler.WorkChan(), out, e.Scheduler)
+		e.createWorker(e.Scheduler.WorkChan(), out, e.Scheduler)
 	}
 
 	for _, seed := range seeds {

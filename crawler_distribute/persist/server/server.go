@@ -1,8 +1,10 @@
 package main
 
 import (
+	"crawler/crawler/model"
 	"crawler/crawler_distribute/persist"
 	"crawler/crawler_distribute/rpcsupport"
+	"encoding/gob"
 	"flag"
 	"fmt"
 	"log"
@@ -34,7 +36,7 @@ func serveRPC(port int, index string) error {
 		client *elastic.Client
 		err    error
 	)
-	// gob.Register(model.ZhenaiPayLoad{})
+	gob.Register(model.ZhenaiPayLoad{})
 	if client, err =
 		elastic.NewClient(elastic.SetSniff(false),
 			elastic.SetURL("http://192.168.94.30:9200")); err != nil {

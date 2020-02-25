@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-// doWork 完成fetch + parser
-func doWork(req *Request) (result *ParserResult, err error) {
+// DoWork 完成fetch + parser
+func DoWork(req *Request) (result *ParserResult, err error) {
 	var (
 		content    []byte
 		speedLimit <-chan time.Time
@@ -29,14 +29,16 @@ func doWork(req *Request) (result *ParserResult, err error) {
 }
 
 // createWorker 创建worker
-func createWorker(in chan *Request, out chan *ParserResult, notifier ReadyNotifier) {
+func (e *ConcurrentEngine) createWorker(in chan *Request, out chan *ParserResult, notifier ReadyNotifier) {
 	go func() {
 		for {
 			notifier.WorkerReady(in)
 			req := <-in
-			result, err := doWork(req)
+			// TODO: call rpc
+			// result, err := DoWork(req)
+			result, err := e.RequestProcessor(req)
 			if err != nil {
-				log.Printf("do work failed. err: %v\r\n", err)
+				log.Printf("Do work failed. err: %v\r\n", err)
 				continue
 			}
 			out <- result

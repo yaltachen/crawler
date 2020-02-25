@@ -8,7 +8,7 @@ import (
 func TestCityListParser(t *testing.T) {
 	var testURL = "http://www.zhenai.com/zhenghun/"
 	content, _ := fetcher.Fetch(testURL)
-	result, err := CityListParser(content)
+	result, err := cityListParser(content)
 	if err != nil {
 		t.Errorf("city list parse failed, err: %v", err)
 	}
